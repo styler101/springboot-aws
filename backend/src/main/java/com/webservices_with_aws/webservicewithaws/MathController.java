@@ -1,5 +1,7 @@
 package com.webservices_with_aws.webservicewithaws;
 
+import com.webservices_with_aws.webservicewithaws.exceptions.UnsupportedMathOperationException;
+import com.webservices_with_aws.webservicewithaws.handler.CustomizeResponseEntityExceptionHandler;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Locale;
@@ -12,7 +14,8 @@ public class MathController {
    @RequestMapping(value="/sum/{number1}/{number2}", method = RequestMethod.GET)
    public double sum(@PathVariable(value = "number1") String numberOne,  @PathVariable(value="number2") String numberTwo) throws Exception{
       if(!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-         throw  new Exception();
+         // devemos sempre retornar a classe de erro.
+         throw  new UnsupportedMathOperationException("Please set a number on request param.");
       }
       return convertToDouble(numberOne) + convertToDouble(numberTwo);
    }
