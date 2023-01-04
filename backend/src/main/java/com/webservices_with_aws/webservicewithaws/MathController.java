@@ -1,5 +1,6 @@
 package com.webservices_with_aws.webservicewithaws;
 
+import com.webservices_with_aws.webservicewithaws.exceptions.ExceptionResponse;
 import com.webservices_with_aws.webservicewithaws.exceptions.UnsupportedMathOperationException;
 import com.webservices_with_aws.webservicewithaws.handler.CustomizeResponseEntityExceptionHandler;
 import org.springframework.web.bind.annotation.*;
@@ -12,12 +13,21 @@ import java.util.concurrent.atomic.AtomicLong;
 public class MathController {
 
    @RequestMapping(value="/sum/{number1}/{number2}", method = RequestMethod.GET)
-   public double sum(@PathVariable(value = "number1") String numberOne,  @PathVariable(value="number2") String numberTwo) throws Exception{
+   public double sum(@PathVariable(value = "number1") String numberOne,  @PathVariable(value="number2") String numberTwo) throws UnsupportedMathOperationException {
       if(!isNumeric(numberOne) || !isNumeric(numberTwo)) {
          // devemos sempre retornar a classe de erro.
          throw  new UnsupportedMathOperationException("Please set a number on request param.");
       }
       return convertToDouble(numberOne) + convertToDouble(numberTwo);
+   }
+
+   @RequestMapping(value="/sub/{number1}/{number2}", method = RequestMethod.GET)
+   // Vamos receber um parametros de rota são passados como string
+   public double sub(@PathVariable(value = "number1") String number1, @PathVariable(value = "number2") String number2) throws UnsupportedMathOperationException{
+      if(!isNumeric(number1) || !isNumeric(number2)) {
+         throw new UnsupportedMathOperationException("Please set a number on request params");
+      }
+      return convertToDouble(number1) - convertToDouble(number2);
    }
 
 
@@ -28,8 +38,6 @@ public class MathController {
 
    private double convertToDouble(String stringNumber){
       return stringNumber == null ? 0D : Double.parseDouble(stringNumber.replace(',', '.'));
-
-
    }
 
 
