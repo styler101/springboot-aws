@@ -39,6 +39,16 @@ public class MathController {
       return convertToDouble(number1) * convertToDouble(number2);
    }
 
+   @GetMapping(value="/division/{number1}/{number2}")
+   public double division(@PathVariable(value="number1") String number1, @PathVariable(value="number2") String number2) throws UnsupportedMathOperationException{
+      if(!isNumeric(number1) || !isNumeric(number2)){
+         throw new UnsupportedMathOperationException("Please set a number on request param.");
+      }
+      double result = convertToDouble(number1) > convertToDouble(number2) ? convertToDouble(number1) / convertToDouble(number2) : convertToDouble(number2) / convertToDouble(number1);
+      return result;
+   }
+
+
    private boolean isNumeric(String stringNumber){
       // verifca se o número é positivo ou negaitvo de 1 a 9 e possui casas decimais
       return stringNumber != null ?  stringNumber.matches("[-+]?[0-9]*\\.?[0-9]+"): false;
