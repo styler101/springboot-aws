@@ -1,6 +1,10 @@
 package com.webservices_with_aws.webservicewithaws.services;
 
 import com.webservices_with_aws.webservicewithaws.entities.Person;
+import com.webservices_with_aws.webservicewithaws.exceptions.RessourceNotFoundException;
+import com.webservices_with_aws.webservicewithaws.repositories.PersonRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,54 +15,43 @@ import java.util.stream.Collectors;
 
 @Service
 public class PersonService {
+    @Autowired
+    private PersonRepository repository;
 
-    private final AtomicLong counter = new AtomicLong();
     private Logger logger = Logger.getLogger(PersonService.class.getName());
     List<Person> persons = new ArrayList<Person>();
-    public Person findById(String id){
-        logger.info("Finding one person!");
-        Person person = new Person();
-        person.setId(counter.getAndIncrement());
-        person.setFirstName("Lucas");
-        person.setGender("Male");
-        person.setLastName("Santos");
-        person.setAddress("Belo Uberlândia - Minas Gerais");
-        return person;
+    public Person findById(Long id){
+        return repository.findById(id).orElseThrow(() -> new RessourceNotFoundException("No data found for this ID"));
     }
 
     public List<Person> findAll(){
-
-        for(int i = 0; i < 8; i++){
-
-            Person person = mockPerson((long) i);
-            persons.add(person);
-        }
-        return persons;
+        return repository.findAll();
     }
 
     public Person create(Person person){
         logger.info("Create one Person!");
-        return person;
+        return repository.save(person);
+
     }
 
-    public Person update(Person person){
-        logger.info("Create one Person!");
-        return person;
+    public Person update( Person person){
+       logger.info("Create one Person!");
+       Person entity = repository.findById(person.getId()).orElseThrow(() -> new RessourceNotFoundException("No recors found for this ID"));
+       entity.setFirstName(person.getFirstName());
+       entity.setAddress(person.getAddress());
+       entity.setGender(person.getGender());
+       entity.setLastName(person.getLastName());
+       return repository.save(person);
     }
 
-    public void delete(String id){
-        persons.stream().filter((x) -> x.getId() != Long.parseLong(id)).collect(Collectors.toList());
+    public void delete(Long id){
+       Person entity = repository.findById(id).orElseThrow(() -> new RessourceNotFoundException("Id not found"));
+       repository.delete(entity);
     }
 
-    private Person mockPerson(Long i){
-        Person person = new Person();
-        person.setId(i);
-        person.setFirstName("Person name" + counter.getAndIncrement());
-        person.setGender("Last Name" + counter.getAndIncrement());
-        person.setLastName("Santos");
-        person.setAddress("Belo Uberlândia - Minas Gerais");
-        return  person;
-    }
+
+
+
 
 }
 
