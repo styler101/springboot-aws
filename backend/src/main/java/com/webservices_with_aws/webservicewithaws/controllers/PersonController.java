@@ -2,6 +2,7 @@ package com.webservices_with_aws.webservicewithaws.controllers;
 
 
 import com.webservices_with_aws.webservicewithaws.data.vo.v1.PersonVO;
+import com.webservices_with_aws.webservicewithaws.data.vo.v2.PersonVOV2;
 import com.webservices_with_aws.webservicewithaws.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -34,6 +35,14 @@ public class PersonController {
    public PersonVO create(@RequestBody PersonVO person){
       return service.create(person);
    }
+
+    @PostMapping(
+            value = "/v2/create",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public PersonVOV2 createV2(@RequestBody PersonVOV2 person){
+        return service.createV2(person);
+    }
    @PutMapping(value="/{id}")
    public PersonVO update(@PathVariable(value="id") Long id , @RequestBody PersonVO person) {
        return service.update(id,person);
@@ -43,8 +52,9 @@ public class PersonController {
        service.delete(id);
        return ResponseEntity.noContent().build();
 
-
    }
+
+
 
 
 }

@@ -1,10 +1,12 @@
 package com.webservices_with_aws.webservicewithaws.services;
 
 import com.webservices_with_aws.webservicewithaws.data.vo.v1.PersonVO;
+import com.webservices_with_aws.webservicewithaws.data.vo.v2.PersonVOV2;
 import com.webservices_with_aws.webservicewithaws.entities.Person;
 import com.webservices_with_aws.webservicewithaws.exceptions.RessourceNotFoundException;
 
 import com.webservices_with_aws.webservicewithaws.mapper.DozerMapper;
+import com.webservices_with_aws.webservicewithaws.mapper.custom.PersonMapper;
 import com.webservices_with_aws.webservicewithaws.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,9 @@ import java.util.logging.Logger;
 public class PersonService {
     @Autowired
     private PersonRepository repository;
+
+    @Autowired
+    private PersonMapper mapper;
 
     private Logger logger = Logger.getLogger(PersonService.class.getName());
 
@@ -55,8 +60,11 @@ public class PersonService {
     }
 
 
-
-
-
+    public PersonVOV2 createV2(PersonVOV2 person){
+        logger.info("Create one Person!");
+        var entity =  mapper.convertVoToEntity(person);
+        var vo = mapper.convertEntityToVo(repository.save(entity));
+        return vo;
+    }
 }
 
