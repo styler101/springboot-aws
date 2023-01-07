@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(value = "/persons")
+@RequestMapping(value = "/api/person/v1")
 public class PersonController {
 
    @Autowired

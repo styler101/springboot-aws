@@ -1,17 +1,23 @@
 package com.webservices_with_aws.webservicewithaws.data.vo.v1;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.webservices_with_aws.webservicewithaws.entities.Person;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+@JsonPropertyOrder({"id", "firstName", "lastName", "gender", "address"})
 public class PersonVO implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long id;
+    @JsonProperty("first_name") // alterando o valor da chave no json
     private String firstName;
+    @JsonProperty("last_name") // Alterando o valor da chave no json
     private String lastName;
     private String address;
-
+    //@JsonIgnore remove a chave no json
     private String gender;
 
     public PersonVO(){
